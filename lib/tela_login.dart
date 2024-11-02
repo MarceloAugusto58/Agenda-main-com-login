@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +10,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _secureStorage = const FlutterSecureStorage();
 
   Future<void> _login() async {
     final username = _usernameController.text;
@@ -19,8 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     bool loginSuccess = await verificarLogin(username, password);
 
     if (loginSuccess) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username_token', username);
+      await _secureStorage.write(key: 'username_token', value: username);
       Navigator.pushReplacementNamed(context, '/listagem');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
