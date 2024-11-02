@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'tela_login.dart';
 import 'tela_lista_contatos.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? usernameToken = prefs.getString('username_token');
+  final _secureStorage = const FlutterSecureStorage();
+  String? usernameToken = await _secureStorage.read(key: 'username_token');
 
   runApp(MyApp(isLoggedIn: usernameToken != null));
 }
@@ -32,3 +31,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
